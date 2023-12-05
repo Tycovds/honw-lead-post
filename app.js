@@ -37,7 +37,7 @@ const refreshAccessToken = async () => {
     }
     return false;
   } catch (error) {
-    console.error('Error refreshing token:', error.message);
+    logError('Error refreshing token:' + error);
     return false;
   }
 };
@@ -56,7 +56,8 @@ const checkAccessToken = async (req, res, next) => {
 
 // Homepage route
 app.get('/', async (req, res) => {
-    res.send('<h1>Heel Oost Nederland Werkt</h1>')
+  logError(req.body)
+    // res.send('<h1>Heel Oost Nederland Werkt</h1>')
 });
 
 
@@ -104,13 +105,22 @@ app.post('/submitLead', checkAccessToken, async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to submit lead' });
       }
     } catch (error) {
-      console.error('Error:', error.message);
+      logError('Error: ' + error.message);
       res.status(500).json({ success: false, message: 'Internal server error' });
     }
   });
   
   
-
+  const logError = (errorMessage) => {
+    const errorFilePath = 'error.txt';
+    const timestamp = new Date().toISOString();
+  
+    fs.appendFile(errorFilePath, `${timestamp}: ${errorMessage}\n`, (err) => {
+      if (err) {
+        console.error('Error writing to error file:', err.message);
+      }
+    });
+  };
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
