@@ -55,8 +55,9 @@ const checkAccessToken = async (req, res, next) => {
 
 // Homepage route
 app.get("/", async (req, res) => {
-  logError(req.body);
-  // res.send('<h1>Heel Oost Nederland Werkt</h1>')
+  logError('error test');
+
+  res.send('<h1>Heel Oost Nederland Werkt</h1>')
 });
 
 // Route to handle leadInfo and make API requests
